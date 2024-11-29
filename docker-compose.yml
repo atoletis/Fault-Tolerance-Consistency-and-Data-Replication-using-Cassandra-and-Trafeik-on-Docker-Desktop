@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+  cassandra1:
+    image: cassandra:latest
+    container_name: cassandra1
+    networks:
+      - cassandra-network
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=CassandraCluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2
+      - CASSANDRA_START_RPC=true
+    labels:
+      - "traefik.tcp.routers.cassandra1.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.cassandra1.service=cassandra1"
+      - "traefik.tcp.services.cassandra1.loadbalancer.server.port=9042"
+
+  cassandra2:
+    image: cassandra:latest
+    container_name: cassandra2
+    networks:
+      - cassandra-network
+    ports:
+      - "9043:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=CassandraCluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2
+      - CASSANDRA_START_RPC=true
+    labels:
+      - "traefik.tcp.routers.cassandra2.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.cassandra2.service=cassandra2"
+      - "traefik.tcp.services.cassandra2.loadbalancer.server.port=9042"
+
+  traefik:
+    image: traefik:v2.4
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.cassandra.address=:8082"
+    ports:
+      - "8082:8082"
+      - "8081:8081"  # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - cassandra-network
+    depends_on:
+      - cassandra1
+      - cassandra2
+
+networks:
+  cassandra-network:
+    driver: bridge
