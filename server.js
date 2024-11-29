@@ -67,6 +67,16 @@ app.post('/signup', (req, res) => {
 
   client.execute(query, params, { prepare: true })
     .then(() => {
+      // Insert data into customers or sellers table based on the role
+      if (role === 'Customer') {
+        const customerQuery = 'INSERT INTO customers (customerid, name, email) VALUES (uuid(), ?, ?)';
+        return client.execute(customerQuery, [username, email], { prepare: true });
+      } else if (role === 'Seller') {
+        const sellerQuery = 'INSERT INTO sellers (sellerid, name, email, phone, address) VALUES (uuid(), ?, ?, null, null)';
+        return client.execute(sellerQuery, [username, email], { prepare: true });
+      }
+    })
+    .then(() => {
       res.render('login', { error: 'Signup successful, please log in.' });
     })
     .catch(err => {
