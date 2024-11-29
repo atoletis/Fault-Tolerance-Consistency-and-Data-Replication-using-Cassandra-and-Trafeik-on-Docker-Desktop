@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>E-commerce DDS</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>E-commerce Website Login</h1>
+
+    <!-- Display error message if it exists -->
+    <% if (error) { %>
+      <p><%= error %></p>
+    <% } %>
+
+    <form action="/login" method="post">
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" required><br>
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" required><br>
+
+      <button type="submit">Login</button>
+      <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    </form>
+  </div>
+</body>
+</html>

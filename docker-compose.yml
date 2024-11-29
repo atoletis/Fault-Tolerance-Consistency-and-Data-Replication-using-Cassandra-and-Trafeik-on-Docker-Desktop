@@ -51,9 +51,9 @@ services:
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=512M
     labels:
-      - "traefik.tcp.routers.cassandra2.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.cassandra2.service=cassandra2"
-      - "traefik.tcp.services.cassandra2.loadbalancer.server.port=9042"
+      - "traefik.tcp.routers.cassandra3.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.cassandra3.service=cassandra3"
+      - "traefik.tcp.services.cassandra3.loadbalancer.server.port=9042"
 
   traefik:
     image: traefik:v2.4
