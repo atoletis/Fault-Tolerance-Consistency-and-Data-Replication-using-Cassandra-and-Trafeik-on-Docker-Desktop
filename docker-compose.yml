@@ -9,12 +9,15 @@ services:
       - "9042:9042"
     environment:
       - CASSANDRA_CLUSTER_NAME=CassandraCluster
-      - CASSANDRA_SEEDS=cassandra1,cassandra2
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
       - CASSANDRA_START_RPC=true
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=512M
     labels:
       - "traefik.tcp.routers.cassandra1.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.cassandra1.service=cassandra1"
       - "traefik.tcp.services.cassandra1.loadbalancer.server.port=9042"
+
 
   cassandra2:
     image: cassandra:latest
@@ -25,8 +28,28 @@ services:
       - "9043:9042"
     environment:
       - CASSANDRA_CLUSTER_NAME=CassandraCluster
-      - CASSANDRA_SEEDS=cassandra1,cassandra2
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
       - CASSANDRA_START_RPC=true
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=512M
+    labels:
+      - "traefik.tcp.routers.cassandra2.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.cassandra2.service=cassandra2"
+      - "traefik.tcp.services.cassandra2.loadbalancer.server.port=9042"
+
+  cassandra3:
+    image: cassandra:latest
+    container_name: cassandra3
+    networks:
+      - cassandra-network
+    ports:
+      - "9044:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=CassandraCluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_START_RPC=true
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=512M
     labels:
       - "traefik.tcp.routers.cassandra2.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.cassandra2.service=cassandra2"
@@ -49,6 +72,7 @@ services:
     depends_on:
       - cassandra1
       - cassandra2
+      - cassandra3
 
 networks:
   cassandra-network:
