@@ -1,0 +1,85 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f3f4f6, #d6eaf8);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: fixed;
+    flex-direction: column;
+}
+
+.header-table {
+    width: 100%;
+    background-color: white;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.left-align {
+    text-align: left;
+    width: 90%;
+    padding-left: 20px;
+}
+
+.right-align {
+    text-align: right;
+    width: 10%;
+    padding-right: 20px;
+}
+
+.header-table h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.close-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.form-wrapper {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-buttons {
+    margin-top: 20px;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background-color: #0056b3;
+}

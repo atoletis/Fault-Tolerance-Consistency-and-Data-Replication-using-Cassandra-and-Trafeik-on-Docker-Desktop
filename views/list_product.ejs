@@ -4,33 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>List a New Product</title>
+  <style>
+    .form-wrapper:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  </style>
 </head>
-<body>
-  <h1>List a New Product</h1>
-  <form action="/list-product" method="POST">
-    <!-- Pass the username as a hidden field -->
-    <input type="hidden" name="username" value="<%= username %>">
-    <div>
-      <label for="name">Product Name:</label>
-      <input type="text" id="name" name="name" required>
-    </div>
-    <div>
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" required></textarea>
-    </div>
-    <div>
-      <label for="price">Price:</label>
-      <input type="number" id="price" name="price" step="0.01" required>
-    </div>
-    <div>
-      <label for="category">Category:</label>
-      <input type="text" id="category" name="category" required>
-    </div>
-    <div>
-      <label for="stocklevel">Stock Level:</label>
-      <input type="number" id="stocklevel" name="stocklevel" required>
-    </div>
-    <button type="submit">List Product</button>
-  </form>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 20px;">
+  <header>
+    <table class="header-table" style="width: 100%; padding: 10px 0; border-bottom: 1px solid #ddd;">
+      <tr>
+        <td class="left-align" style="text-align: left; padding-left: 20px;">
+          <h1 style="margin: 0; font-size: 1.2em; color: #333;">List a New Product</h1>
+        </td>
+        <td class="right-align" style="text-align: right; padding-right: 20px;">
+          <button onclick="window.location.href='/seller-main?username=<%= username %>'" class="close-btn" style="background-color: transparent; border: none; font-size: 14px; color: #007bff; cursor: pointer;">X</button>
+        </td>
+      </tr>
+    </table>
+  </header>
+
+  <main>
+    <form action="/list-product" method="POST" class="form-wrapper" style="transition: transform 0.2s ease-in-out;display: grid; gap: 15px; padding: 20px; max-width: 300px; margin: 20px auto; background-color: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <!-- Pass the username as a hidden field -->
+      <input type="hidden" name="username" value="<%= username %>">
+
+      <label for="name" class="input-label" style="font-weight: bold;">Product Name:</label>
+      <input type="text" id="name" name="name" required class="input-field" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+
+      <label for="description" class="input-label" style="font-weight: bold;">Description:</label>
+      <input id="description" name="description" required class="input-field" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;"></input>
+
+      <label for="price" class="input-label" style="font-weight: bold;">Price:</label>
+      <input type="number" id="price" name="price" step="0.01" required class="input-field" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+
+      <label for="category" class="input-label" style="font-weight: bold;">Category:</label>
+      <input type="text" id="category" name="category" required class="input-field" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+
+      <label for="stocklevel" class="input-label" style="font-weight: bold;">Stock Level:</label>
+      <input type="number" id="stocklevel" name="stocklevel" required class="input-field" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+
+      <div class="form-buttons" style="display: flex; justify-content: center;">
+        <button type="submit" class="save-btn" style="width: 50%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: white; font-size: 16px; cursor: pointer;">List Product</button>
+      </div>
+    </form>
+  </main>
 </body>
 </html>

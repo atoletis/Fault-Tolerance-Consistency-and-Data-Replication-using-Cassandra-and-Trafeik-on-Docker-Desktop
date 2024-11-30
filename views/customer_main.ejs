@@ -4,23 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Main</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/customer_main.css">
 </head>
 <body>
   <header>
-    <h1>Welcome, <%= username %>!</h1>
-    <button onclick="window.location.href='/profile?username=<%= username %>'">Profile</button>
-    <button onclick="window.location.href='/show-cart?username=<%= username %>'">Show Cart</button>
+    <table class="header-table">
+      <tr>
+        <td class="left-align">
+          <button id="profile-btn">Profile</button>
+        </td>
+        <td class="center-align">
+          <h1>Welcome <%= username %>!</h1>
+        </td>
+        <td class="right-align">
+          <button onclick="window.location.href='/show-cart?username=<%= username %>'">Show Cart</button>
+          <button onclick="window.location.href='/login'">Logout</button>
+        </td>
+      </tr>
+    </table>
   </header>
-  <main>
+  <!-- Side navigation container -->
+  <div id="side-nav" class="side-nav"></div>
+  
+  <!-- Main content -->
+  <main id="main-content" class="main-content">
     <h2>Products</h2>
-    <div class="product-grid">
+    <div id="products-grid" style="max-width:75%">
       <% products.forEach(product => { %>
-        <div class="product-card">
-          <h3><%= product.name %></h3> <!-- Product name displayed here -->
-          <p><%= product.description %></p>
-          <p>Price: $<%= product.price %></p> <!-- Display price with 2 decimal places -->
-          <button onclick="addToCart('<%= product.productid %>', '<%= product.name %>', '<%= product.price %>')">
+        <div class="product-card" style="display:fixed;max-width:100%">
+          <h3 class="product-title"><%= product.name %></h3>
+          <p class="product-description"><%= product.description %></p>
+          <p class="product-price">Price: $<%= product.price %></p>
+          <button class="add-to-cart-btn" onclick="addToCart('<%= product.productid %>', '<%= product.name %>', '<%= product.price %>')">
             Add to Cart
           </button>
         </div>
@@ -29,11 +44,29 @@
   </main>
 
   <script>
+    document.getElementById('profile-btn').addEventListener('click', () => {
+      const sideNav = document.getElementById('side-nav');
+
+      if (sideNav.classList.contains('active')) {
+        sideNav.classList.remove('active');
+        mainContent.classList.remove('shifted');
+        sideNav.innerHTML = '';
+      } else {
+        sideNav.classList.add('active');
+        fetch('/profile?username=<%= username %>', { method: 'GET' })
+          .then(response => response.text())
+          .then(html => {
+            sideNav.innerHTML = html;
+          })
+          .catch(error => console.error('Error loading profile:', error));
+      }
+    });
+
     function addToCart(productId, productName, productPrice) {
       fetch('/add-to-cart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, productName, productPrice }) // Send additional details
+        body: JSON.stringify({ productId, productName, productPrice })
       }).then(response => {
         if (response.ok) {
           alert('Added ' + productName + ' to cart!');

@@ -4,38 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart</title>
-  <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
-  <header>
-    <h1>Your Cart</h1>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; color: #333;">
+  <header style="text-align: center; margin-bottom: 20px;">
+    <h1 style="font-size: 2.5em; color: #444;">Your Cart</h1>
   </header>
-  <main>
-    <div class="cart-grid">
-      <% cartItems.forEach(item => { %>
-        <div class="cart-card">
-          <h3><%= item.productName %></h3>
-          <p>Quantity: <%= item.quantity %></p>
-          <p>Price per unit: $<%= item.productPrice %></p>
-          <p>Total Price: $<%= (item.productPrice * item.quantity) %></p>
-        </div>
-      <% }) %>
+  <main id="main-content" class="main-content" style="display: flex; flex-direction: column; align-items: center;">
+    <div id="products-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; width: 100%; padding: 10px; box-sizing: border-box;">
+      <% if (cartItems && cartItems.length > 0) { %>
+        <% cartItems.forEach(item => { %>
+          <div class="product-card" id="product-card" style="background: #fff; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; text-align: center;">
+            <h3 style="font-size: 1.5em; color: #333; margin-bottom: 10px;"><%= item.productName %></h3>
+            <p style="margin: 5px 0;">Quantity: <%= item.quantity %></p>
+            <p style="margin: 5px 0;">Price per unit: $<%= item.productPrice %></p>
+            <p style="margin: 5px 0; font-weight: bold;">Total Price: $<%= (item.productPrice * item.quantity) %></p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p style="font-size: 1.2em; color: #555;">Your cart is empty. Add some products to your cart!</p>
+      <% } %>
     </div>
-
-    <form action="/checkout" method="POST">
-      <input type="text" name="username" value="<%= username %>">
-      <label>
+  </main>
+  <main class="main-content" style="margin-top: 30px; text-align: center;">
+    <form action="/checkout" method="POST" style="display: inline-block; text-align: left;">
+      <input type="text" name="username" value="<%= username %>" hidden>
+      <label style="display: block; margin-bottom: 10px; font-size: 1.1em;">
         Payment Method:
-        <select name="paymentMethod">
+        <select name="paymentMethod" style="padding: 5px; font-size: 1em; margin-top: 5px;">
           <option value="Credit Card">Credit Card</option>
           <option value="Debit Card">Debit Card</option>
           <option value="PayPal">PayPal</option>
         </select>
       </label>
-      <button type="submit">Checkout</button>
+      <button type="submit" style="background-color: #007BFF; color: #fff; padding: 10px 20px; font-size: 1em; border: none; border-radius: 5px; cursor: pointer;">
+        Checkout
+      </button>
     </form>
-
-    <button onclick="window.location.href='/customer-main?username=<%= username %>'">Back</button>
+    <button onclick="window.location.href='/customer-main?username=<%= username %>'" style="margin-top: 10px; background-color: #6c757d; color: #fff; padding: 10px 20px; font-size: 1em; border: none; border-radius: 5px; cursor: pointer;">
+      Back
+    </button>
   </main>
 </body>
 </html>

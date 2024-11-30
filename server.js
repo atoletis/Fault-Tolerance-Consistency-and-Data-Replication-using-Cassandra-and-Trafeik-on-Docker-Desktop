@@ -261,7 +261,18 @@ app.post('/add-to-cart', (req, res) => {
   });
   
   
-
+// Remove item from cart
+app.delete('/remove-from-cart/:index', (req, res) => {
+    const index = parseInt(req.params.index);
+  
+    if (req.session.cart && req.session.cart[index]) {
+      req.session.cart.splice(index, 1); // Remove the item from the cart
+      res.status(200).send('Item removed successfully');
+    } else {
+      res.status(400).send('Item not found in cart');
+    }
+  });
+  
 // Show Cart Page
 app.get('/show-cart', (req, res) => {
     const { username } = req.query;

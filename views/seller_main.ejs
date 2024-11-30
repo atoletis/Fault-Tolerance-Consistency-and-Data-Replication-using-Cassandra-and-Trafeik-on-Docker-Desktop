@@ -1,34 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seller Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <link rel="stylesheet" href="customer_main.css">
 </head>
 <body>
-  <h1>Welcome, <%= username %>!</h1>
+    <header>
+        <table class="header-table">
+          <tr>
+            <td class="left-align">
+                <button id="list-product-btn">List a New Product</button>
+            </td>
+            <td class="center-align">
+              <h1>Welcome <%= username %>!</h1>
+            </td>
+            <td class="right-align">
+              <button onclick="window.location.href='/login'">Logout</button>
+            </td>
+          </tr>
+        </table>
+      </header>
+      <!-- Side navigation container -->
+  <div id="side-nav" class="side-nav"></div>
 
-  <h2>Your Products</h2>
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Category</th>
-      <th>Stock Level</th>
-    </tr>
-    <% products.forEach(product => { %>
-      <tr>
-        <td><%= product.name %></td>
-        <td><%= product.description %></td>
-        <td><%= product.price %></td>
-        <td><%= product.category %></td>
-        <td><%= product.stocklevel %></td>
-      </tr>
-    <% }) %>
-  </table>
+    <main id="main-content" class="main-content">
+        <h2 id="products-title">Your Products</h2>
+        <div id="products-grid" style="max-width:75%">
+            <% products.forEach(product => { %>
+                <div class="product-card" id="product-<%= product.id %>" style="display:fixed;max-width:100%">
+                    <h3 class="product-name">Name: <%= product.name %></h3>
+                    <p class="product-description">Description: <%= product.description %></p>
+                    <p class="product-price">Price: $<%= product.price %></p>
+                    <p class="product-category">Category: <%= product.category %></p>
+                    <p class="product-stock">Stock: <%= product.stocklevel %></p>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <script>
+        document.getElementById('list-product-btn').addEventListener('click', () => {
+      const sideNav = document.getElementById('side-nav');
 
-  <!-- Add the "List a New Product" button -->
-  <button onclick="window.location.href='/list-product?username=<%= username %>'">List a New Product</button>
+      if (sideNav.classList.contains('active')) {
+        sideNav.classList.remove('active');
+        mainContent.classList.remove('shifted');
+        sideNav.innerHTML = '';
+      } else {
+        sideNav.classList.add('active');
+        fetch('/list-product?username=<%= username %>', { method: 'GET' })
+          .then(response => response.text())
+          .then(html => {
+            sideNav.innerHTML = html;
+          })
+          .catch(error => console.error('Error loading profile:', error));
+      }
+    });
+    </script>
 </body>
 </html>
