@@ -202,12 +202,9 @@ app.get('/profile', (req, res) => {
 // Update Customer Profile
 app.post('/update-profile', (req, res) => {
     const { phone, address, username } = req.body;
-    console.log( req.body);
   
     // Fetch customer ID
     const selectQuery = 'SELECT id FROM users WHERE username = ? ALLOW FILTERING';
-    console.log(username);
-    console.log(phone);
     client
       .execute(selectQuery, [username], { prepare: true })
       .then((result) => {
@@ -216,7 +213,6 @@ app.post('/update-profile', (req, res) => {
         }
   
         const customerId = result.rows[0].id;
-        console.log(result.rowLength);
   
         // Update customer details
         const updateQuery = 'UPDATE customers SET phone = ?, address = ? WHERE customerid = ?';
@@ -267,9 +263,7 @@ app.get('/show-cart', (req, res) => {
     const { username } = req.query;
     
     // Retrieve cart from the session
-    const cartItems = req.session.cart;
-    console.log(req.session.cart);
-    
+    const cartItems = req.session.cart;    
     // Render the cart page with cart items
     res.render('show_cart', { cartItems, username });
   });
@@ -281,8 +275,6 @@ app.post('/checkout', (req, res) => {
   
     // Retrieve cart from the session
     const cartItems = req.session.cart;
-    console.log('username');
-    console.log(username);
     
     // If the cart is empty, return an error
     if (cartItems.length === 0) {
