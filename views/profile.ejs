@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Profile</h1>
+  </header>
+  <main>
+    <form action="/update-profile" method="POST">
+      <input type="text" name="username" value="<%= customer.name %>"> <!-- Hidden input -->
+
+      <label>
+        Email: <input type="email" value="<%= customer.email %>" disabled>
+      </label>
+      <label>
+        Phone: <input type="text" name="phone" value="<%= customer.phone %>">
+      </label>
+      <label>
+        Address: <input type="text" name="address" value="<%= customer.address %>">
+      </label>
+      <button type="submit">Save</button>
+    </form>
+    <button onclick="window.location.href='/customer-main'">Back</button>
+  </main>
+</body>
+</html>

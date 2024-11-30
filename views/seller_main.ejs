@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Dashboard</title>
+</head>
+<body>
+  <h1>Welcome, <%= username %>!</h1>
+
+  <h2>Your Products</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Category</th>
+      <th>Stock Level</th>
+    </tr>
+    <% products.forEach(product => { %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.description %></td>
+        <td><%= product.price %></td>
+        <td><%= product.category %></td>
+        <td><%= product.stocklevel %></td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <!-- Add the "List a New Product" button -->
+  <button onclick="window.location.href='/list-product?username=<%= username %>'">List a New Product</button>
+</body>
+</html>

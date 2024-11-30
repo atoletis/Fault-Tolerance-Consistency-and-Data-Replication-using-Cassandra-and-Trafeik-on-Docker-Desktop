@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const client = new cassandra.Client({
   contactPoints: ['192.168.59.1:8082'],  // Updated port for Traefik load balancer
   localDataCenter: 'datacenter1',
-  keyspace: 'my_keyspace'
+  keyspace: 'ecommerce_keyspace'
 });
 
 client.connect((err) => {

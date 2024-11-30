@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Your Cart</h1>
+  </header>
+  <main>
+    <div class="cart-grid">
+      <% cartItems.forEach(item => { %>
+        <div class="cart-card">
+          <h3><%= item.productName %></h3>
+          <p>Quantity: <%= item.quantity %></p>
+          <p>Price per unit: $<%= item.productPrice %></p>
+          <p>Total Price: $<%= (item.productPrice * item.quantity) %></p>
+        </div>
+      <% }) %>
+    </div>
+
+    <form action="/checkout" method="POST">
+      <input type="text" name="username" value="<%= username %>">
+      <label>
+        Payment Method:
+        <select name="paymentMethod">
+          <option value="Credit Card">Credit Card</option>
+          <option value="Debit Card">Debit Card</option>
+          <option value="PayPal">PayPal</option>
+        </select>
+      </label>
+      <button type="submit">Checkout</button>
+    </form>
+
+    <button onclick="window.location.href='/customer-main?username=<%= username %>'">Back</button>
+  </main>
+</body>
+</html>
