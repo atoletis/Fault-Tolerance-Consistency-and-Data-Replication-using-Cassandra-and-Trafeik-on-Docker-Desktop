@@ -17,7 +17,12 @@ services:
       - "traefik.tcp.routers.cassandra1.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.cassandra1.service=cassandra1"
       - "traefik.tcp.services.cassandra1.loadbalancer.server.port=9042"
-
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "SELECT release_version FROM system.local"]
+      interval: 30s
+      retries: 3
+      timeout: 10s
+      start_period: 10s
 
   cassandra2:
     image: cassandra:latest
@@ -36,6 +41,12 @@ services:
       - "traefik.tcp.routers.cassandra2.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.cassandra2.service=cassandra2"
       - "traefik.tcp.services.cassandra2.loadbalancer.server.port=9042"
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "SELECT release_version FROM system.local"]
+      interval: 30s
+      retries: 3
+      timeout: 10s
+      start_period: 10s
 
   cassandra3:
     image: cassandra:latest
@@ -54,6 +65,12 @@ services:
       - "traefik.tcp.routers.cassandra3.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.cassandra3.service=cassandra3"
       - "traefik.tcp.services.cassandra3.loadbalancer.server.port=9042"
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "SELECT release_version FROM system.local"]
+      interval: 30s
+      retries: 3
+      timeout: 10s
+      start_period: 10s
 
   traefik:
     image: traefik:v2.4
@@ -61,6 +78,7 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
+      - "--entrypoints.web.address=:8081"
       - "--entrypoints.cassandra.address=:8082"
     ports:
       - "8082:8082"
@@ -73,6 +91,12 @@ services:
       - cassandra1
       - cassandra2
       - cassandra3
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8082"]
+      interval: 30s
+      retries: 3
+      timeout: 10s
+      start_period: 10s
 
 networks:
   cassandra-network:

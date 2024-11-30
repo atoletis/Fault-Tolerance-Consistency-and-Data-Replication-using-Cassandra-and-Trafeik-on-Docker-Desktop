@@ -6,7 +6,26 @@ const path = require('path');
 const app = express();
 const port = 3000;
 const session = require('express-session');
+const os = require('os');
 
+// Function to get the local IP address
+function getLocalIP() {
+  const networkInterfaces = os.networkInterfaces();
+  
+  for (const interfaceName in networkInterfaces) {
+    const interfaces = networkInterfaces[interfaceName];
+    
+    for (const networkInterface of interfaces) {
+      if (networkInterface.family === 'IPv4' && !networkInterface.internal) {
+        return networkInterface.address;
+      }
+    }
+  }
+  
+  return null; // If no valid IPv4 address is found
+}
+
+const localIP = getLocalIP() + ':8082';
 // Use express-session to handle session
 app.use(session({
   secret: 'aditya', // You can replace this with any secret string
@@ -20,7 +39,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Cassandra client configuration
 const client = new cassandra.Client({
-  contactPoints: ['192.168.59.1:8082'], // Updated port for Traefik load balancer
+  contactPoints: [localIP], // Updated port for Traefik load balancer
   localDataCenter: 'datacenter1',
   keyspace: 'ecommerce_keyspace'
 });
@@ -305,7 +324,7 @@ app.post('/checkout', (req, res) => {
     const customerQuery = 'SELECT id FROM users WHERE username = ? ALLOW FILTERING';
   
     // Retrieve the customer ID based on username
-    client.execute(customerQuery, ['qwerty'], { prepare: true })
+    client.execute(customerQuery, [username], { prepare: true })
       .then(customerResult => {
         if (customerResult.rowLength === 0) {
           // Send error response and stop further execution
@@ -317,7 +336,7 @@ app.post('/checkout', (req, res) => {
         const totalAmount = cartItems.reduce((sum, item) => sum + (item.productPrice * item.quantity), 0);
   
         // Insert the order into the orders table
-        return client.execute(orderQuery, [orderId, customer.customerid, totalAmount], { prepare: true })
+        return client.execute(orderQuery, [orderId, customer.id, totalAmount], { prepare: true })
           .then(() => {
             // Insert each item into the orderdetails table
             const orderDetailsPromises = cartItems.map(item => {
